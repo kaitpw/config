@@ -16,74 +16,61 @@ RCtrl::RAlt        ; Physical Right Ctrl now acts as Right Alt (Mac Option posit
 
 
 ; ----- Right-Hand Navigation Cluster -----
-RAlt::Return
+*RAlt::Return
+; * and {Blank} allow passthrough of other modifiers being held
 #HotIf GetKeyState("RAlt", "P")
-    k::Send "{Left}"
-    l::Send "{Down}"
-    o::Send "{Up}"                          
-    `;::Send "{Right}"
-    ,::Send "{Home}"                            
-    /::Send "{End}"
-    Enter::Send "{Backspace}"
-#HotIf ; Turn off context sensitivity                   
+    *k::Send "{Blind}{Left}"
+    *l::Send "{Blind}{Down}"
+    *o::Send "{Blind}{Up}"
+    *`;::Send "{Blind}{Right}"
+    *,::Send "{Blind}{Home}"                            
+    */::Send "{Blind}{End}"
+    *Enter::Send "{Blind}{Backspace}"
+#HotIf
 
 
 
 ; ----- Left-Hand Context Cluster Remaps -----
 SetCapsLockState('AlwaysOff')
-F3::CapsLock
 Capslock::Return
+F3::CapsLock
 
-; --- Window Switching --- ; this does not work inside of hotif
+; --- Window Switching --- ; AltTab reassignment ONLY WORKS LIKE THIS
 Capslock & a::ShiftAltTab
 Capslock & d::AltTab
-Capslock & s::Send "#{Tab}"
+Capslock & s::Send "#{Tab}" ; doesn't matter if in loop or not
 
-; --- Back/Forward History ---Dda
-Capslock & q::Send "!{Left}"
-Capslock & e::Send "!{Right}"
-
-
-CtrlUp() {
-    if (!GetKeyState("Capslock")) 
-        Send("{RCtrl up}")
-}
-
-; ;  --- MRU/Buffer Switching --- ; tab cycling only works correctly if done like this and no other capslock mods exist
 #Hotif GetKeyState("Capslock", "P")
+    ; --- Back/Forward History
+    q::Send "!{Left}"
+    e::Send "!{Right}"
+    ;  --- MRU/Buffer Switching --- ;
     Tab::{
-        SetTimer(CtrlUp, -750)
         Send "{RCtrl Down}{Tab}"
+        KeyWait "Capslock"
+        Send "{RCtrl up}"
     }
     +Tab::{
-        SetTimer(CtrlUp, -750)
         Send "{Shift}{RCtrl Down}{Tab}"
+        KeyWait "Capslock"
+        Send "{RCtrl up}"
     }
 #Hotif
 
 
 
-; ----- State Variable -----
-global _isSpaceActingAsShift := false
-; ----- Spacebar Hotkey -----
-; Using the * prefix allows it to work even if other modifiers (like Ctrl, Alt, Win) are held
-; Using $ prefix prevents the hotkey from triggering itself via Send commands inside it
+; ----- Shifty Spacebar -----
+;  * allows modifier passthrough, $ prevents triggering itself via Send commands inside it
 *$Space::{
-    global _isSpaceActingAsShift
-    local DELAY := 100 / 1000
-    local space_released_or_timedout := false ; Variable to store KeyWait result
-    space_released_or_timedout := KeyWait("Space", "T" . DELAY)
+    local DELAY_MS := 100
+    local space_released_or_timedout := KeyWait("Space", "T" . DELAY_MS / 1000)
 
-    if not space_released_or_timedout {
-        Send "{Shift Down}" ; --- Space being HELD ---
-        _isSpaceActingAsShift := true
-        KeyWait "Space" ; --- Wait forever until space released ---
-        Send "{Shift Up}" ; --- Space was RELEASED ---
-        _isSpaceActingAsShift := false
+    if space_released_or_timedout {
+        SendText " "
     } else {
-        if !GetKeyState("Shift", "P") and !_isSpaceActingAsShift{
-            SendText " " ; SendText is often reliable for single characters
-        }
+        Send "{Shift Down}" ; --- Space being HELD ---
+        KeyWait "Space"
+        Send "{Shift Up}" ; --- Space was RELEASED ---
     }
     Return
 }
