@@ -1,0 +1,1 @@
+source "/Users/kai-admin/.deno/env.fish"
