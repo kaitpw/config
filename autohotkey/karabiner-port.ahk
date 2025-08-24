@@ -5,6 +5,9 @@
 #SingleInstance Force ; Ensure only one instance runs and replace the old one automatically
 SendMode "Input" ; Use Input mode for potentially better reliability
 
+; ----- Include App Shortcuts -----
+#Include "revit-shortcuts.ahk"
+
 ; ----- Core Remaps -----
 LCtrl::LWin        ; Physical Left Ctrl now acts as Left Win
 LAlt::LCtrl        ; Physical Left Alt now acts as Left Ctrl (Mac Command position)
@@ -58,10 +61,15 @@ Capslock & 3:: { ; Launch/Activate Vivaldi
     }
 }
 Capslock & 4:: { ; Launch/Activate File explorer
-    if WinExist("ahk_exe explorer.exe") {
+    if WinExist("ahk_class CabinetWClass") { ; Window exists
         WinActivate
-    } else {
-        Run "explorer.exe"
+    } else { ; No window exists
+        try { ; Use the most reliable method for Windows 11
+            Run "explorer.exe /e,C:\Users\kaitp\OneDrive\Documents\A\Shortcuts"
+        } catch {
+            ; Fallback method
+            Run "cmd.exe /c start explorer.exe C:\Users\kaitp\OneDrive\Documents\A\Shortcuts"
+        }
     }
 }
 Capslock & 5:: { ; Launch/Activate Revit
@@ -74,7 +82,14 @@ Capslock & 5:: { ; Launch/Activate Revit
 
 #Hotif GetKeyState("Capslock", "P")
 ; --- Back/Forward History
-q:: Send "!{Left}"
+q::{
+    Send "!{Left}"
+    ; Only run if the active window is Revit
+    if WinActive("ahk_exe Revit.exe")
+    {
+        ControlClick "Button6",, "Previous folder(Alt+1)"  ; Previous folder button
+    }
+}
 e:: Send "!{Right}"
 ;  --- MRU/Buffer Switching --- ;
 Tab:: {

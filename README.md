@@ -9,3 +9,5 @@ the entire .congif/fish directory
 
 ## Vivaldi
 just color themes
+# TODO
+- add ctrl q to quit (couldn't get inputs right on first try)
