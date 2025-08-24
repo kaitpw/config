@@ -62,7 +62,7 @@ Capslock & s::Send "#{Tab}" ; doesn't matter if in loop or not
 ; ----- Shifty Spacebar -----
 ;  * allows modifier passthrough, $ prevents triggering itself via Send commands inside it
 *$Space::{
-    local DELAY_MS := 100
+    local DELAY_MS := 120
     local space_released_or_timedout := KeyWait("Space", "T" . DELAY_MS / 1000)
 
     if space_released_or_timedout {
