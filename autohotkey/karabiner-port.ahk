@@ -57,6 +57,13 @@ Capslock & 3:: { ; Launch/Activate Vivaldi
         Run "vivaldi.exe"
     }
 }
+Capslock & 4:: { ; Launch/Activate Vivaldi
+    if WinExist("ahk_exe Revit.exe") {
+        WinActivate
+    } else {
+        Run "vivaldi.exe"
+    }
+}
 
 #Hotif GetKeyState("Capslock", "P")
 ; --- Back/Forward History
