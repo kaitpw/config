@@ -36,7 +36,8 @@ Capslock & s:: Send "#{Tab}" ; doesn't matter if in loop or not
 
 ; --- Application Launchers ---
 Capslock & 1:: { ; Launch/Activate Windows Terminal
-    if WinExist("ahk_exe wt.exe") {
+    ; Try multiple ways to find existing Windows Terminal
+    if WinExist("ahk_exe WindowsTerminal.exe") {
         WinActivate
     } else {
         Run "wt.exe"
