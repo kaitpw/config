@@ -57,11 +57,18 @@ Capslock & 3:: { ; Launch/Activate Vivaldi
         Run "vivaldi.exe"
     }
 }
-Capslock & 4:: { ; Launch/Activate Vivaldi
+Capslock & 4:: { ; Launch/Activate File explorer
+    if WinExist("ahk_exe explorer.exe") {
+        WinActivate
+    } else {
+        Run "explorer.exe"
+    }
+}
+Capslock & 5:: { ; Launch/Activate Revit
     if WinExist("ahk_exe Revit.exe") {
         WinActivate
     } else {
-        Run "vivaldi.exe"
+        Run "Revit.exe"
     }
 }
 
