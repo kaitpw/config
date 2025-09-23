@@ -5,7 +5,8 @@
 #SingleInstance Force ; Ensure only one instance runs and replace the old one automatically
 SendMode "Input" ; Use Input mode for potentially better reliability
 
-
+; ----- Include App Shortcuts -----
+#Include "revit-shortcuts.ahk"
 
 ; ----- Core Remaps -----
 LCtrl::LWin        ; Physical Left Ctrl now acts as Left Win
@@ -13,56 +14,100 @@ LAlt::LCtrl        ; Physical Left Alt now acts as Left Ctrl (Mac Command positi
 LWin::LAlt         ; Physical Left Win now acts as Left Alt (Mac Option position)
 RCtrl::RAlt        ; Physical Right Ctrl now acts as Right Alt (Mac Option position)
 
-
-
 ; ----- Right-Hand Navigation Cluster -----
-*RAlt::Return
+*RAlt:: return
 ; * and {Blank} allow passthrough of other modifiers being held
 #HotIf GetKeyState("RAlt", "P")
-    *k::Send "{Blind}{Left}"
-    *l::Send "{Blind}{Down}"
-    *o::Send "{Blind}{Up}"
-    *`;::Send "{Blind}{Right}"
-    *,::Send "{Blind}{Home}"                            
-    */::Send "{Blind}{End}"
-    *Enter::Send "{Blind}{Backspace}"
+*k:: Send "{Blind}{Left}"
+*l:: Send "{Blind}{Down}"
+*o:: Send "{Blind}{Up}"
+*`;:: Send "{Blind}{Right}"
+*,:: Send "{Blind}{Home}"
+*/:: Send "{Blind}{End}"
+*Enter:: Send "{Blind}{Backspace}"
 #HotIf
-
-
 
 ; ----- Left-Hand Context Cluster Remaps -----
 SetCapsLockState('AlwaysOff')
-Capslock::Return
+Capslock:: return
 F3::CapsLock
 
 ; --- Window Switching --- ; AltTab reassignment ONLY WORKS LIKE THIS
 Capslock & a::ShiftAltTab
 Capslock & d::AltTab
-Capslock & s::Send "#{Tab}" ; doesn't matter if in loop or not
+Capslock & s:: Send "#{Tab}" ; doesn't matter if in loop or not
+
+; --- Application Launchers ---
+Capslock & 1:: { ; Launch/Activate Windows Terminal
+    ; Try multiple ways to find existing Windows Terminal
+    if WinExist("ahk_exe WindowsTerminal.exe") {
+        WinActivate
+    } else {
+        Run "wt.exe"
+    }
+}
+Capslock & 2:: { ; Launch/Activate Cursor
+    if WinExist("ahk_exe cursor.exe") {
+        WinActivate
+    } else {
+        Run "cursor.exe"
+    }
+}
+Capslock & 3:: { ; Launch/Activate Vivaldi
+    if WinExist("ahk_exe vivaldi.exe") {
+        WinActivate
+    } else {
+        Run "vivaldi.exe"
+    }
+}
+Capslock & 4:: { ; Launch/Activate File explorer
+    if WinExist("ahk_class CabinetWClass") { ; Window exists
+        WinActivate
+    } else { ; No window exists
+        try { ; Use the most reliable method for Windows 11
+            Run "explorer.exe /e,C:\Users\kaitp\OneDrive\Documents\A\Shortcuts"
+        } catch {
+            ; Fallback method
+            Run "cmd.exe /c start explorer.exe C:\Users\kaitp\OneDrive\Documents\A\Shortcuts"
+        }
+    }
+}
+Capslock & 5:: { ; Launch/Activate Revit
+    if WinExist("ahk_exe Revit.exe") {
+        WinActivate
+    } else {
+        Run "Revit.exe"
+    }
+}
 
 #Hotif GetKeyState("Capslock", "P")
-    ; --- Back/Forward History
-    q::Send "!{Left}"
-    e::Send "!{Right}"
-    ;  --- MRU/Buffer Switching --- ;
-    Tab::{
-        Send "{RCtrl Down}{Tab}"
-        KeyWait "Capslock"
-        Send "{RCtrl up}"
+; --- Back/Forward History
+q::{
+    Send "!{Left}"
+    ; Only run if the active window is Revit
+    if WinActive("ahk_exe Revit.exe")
+    {
+        ControlClick "Button6",, "Previous folder(Alt+1)"  ; Previous folder button
     }
-    +Tab::{
-        Send "{Shift}{RCtrl Down}{Tab}"
-        KeyWait "Capslock"
-        Send "{RCtrl up}"
-    }
+}
+e:: Send "!{Right}"
+;  --- MRU/Buffer Switching --- ;
+Tab:: {
+    Send "{RCtrl Down}{Tab}"
+    KeyWait "Capslock"
+    Send "{RCtrl up}"
+}
++Tab:: {
+    Send "{Shift}{RCtrl Down}{Tab}"
+    KeyWait "Capslock"
+    Send "{RCtrl up}"
+}
 #Hotif
-
-
 
 ; ----- Shifty Spacebar -----
 ;  * allows modifier passthrough, $ prevents triggering itself via Send commands inside it
-*$Space::{
-    local DELAY_MS := 100
+*$Space:: {
+    local DELAY_MS := 120
     local space_released_or_timedout := KeyWait("Space", "T" . DELAY_MS / 1000)
 
     if space_released_or_timedout {
@@ -72,5 +117,5 @@ Capslock & s::Send "#{Tab}" ; doesn't matter if in loop or not
         KeyWait "Space"
         Send "{Shift Up}" ; --- Space was RELEASED ---
     }
-    Return
+    return
 }
