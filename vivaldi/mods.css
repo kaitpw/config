@@ -1,0 +1,111 @@
+/* You MUST
+1. Have "Native Windows" disabled
+2. customize address bar to: flexible space, address bar, flexible space
+3. customize status bar to: status info (only this)
+4. customize the tab bar at the top to: flexible space, back, forward, reload. (the flex space is the crucial part here)
+*/
+
+/* Arcify by adding padding to browser */
+#browser {
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 0;
+}
+
+/* Arcify by adding border radius and uniform inset shadow to main content container */
+#webpage-stack {
+	border-radius: 6px;
+	box-shadow: inset 0 0 12px 0 rgba(0, 0, 0, 0.16);
+}
+
+.tabbar-wrapper {
+	background: transparent !important;
+
+	.tabbar-wrapper {
+		background: transparent !important;
+	}
+
+	#tabs-tabbar-container {
+		padding-top: 0 !important;
+		padding-bottom: 0 !important;
+		padding-left: 5px !important;
+		padding-right: 5px !important;
+		background: transparent !important;
+		box-shadow: none !important;
+	}
+
+	#tabs-container {
+		background: transparent !important;
+	}
+}
+
+/* Make header overlay at the very top, not affecting layout */
+#browser #header {
+	/* position inside of the container gutter*/
+	position: absolute !important;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 10px !important;
+	background: transparent !important;
+	border: 0 !important;
+	box-shadow: none !important;
+	* {
+		color: transparent !important; /* avoid text rendering */
+	}
+}
+
+/* Arcify by collapsing mainbar height and remove padding/borders so it doesn't push UI */
+#browser.mac .mainbar {
+	/* position inside of the container gutter*/
+	overflow: visible !important; /* let children escape */
+	position: absolute !important;
+	top: -10px;
+	left: 0;
+	right: 0;
+	height: 10px !important;
+	border: 0 !important;
+
+	/* let pointer events pass through (for forward/back/reload buttons) */
+	pointer-events: none !important;
+
+	.UrlBar-AddressField {
+		opacity: 0;
+		transition: opacity 120ms ease;
+		max-width: 500px;
+		margin-top: 30%;
+
+		&:not(:has(.UrlField:focus-within, #urlFieldInput:focus)) {
+			pointer-events: none;
+		}
+
+		&:has(.UrlField:focus-within, #urlFieldInput:focus) {
+			opacity: 1;
+			pointer-events: auto;
+		}
+	}
+}
+
+#footer {
+	background: transparent !important;
+	position: absolute !important;
+	bottom: -2px;
+	border: 0 !important;
+
+	/* Highlight status text when present */
+	.UrlFragments {
+		background-color: rgba(255, 255, 255, 0.9);
+		padding: 2px 4px;
+		border-radius: 3px;
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+		/* Only show when there's meaningful content */
+		opacity: 0;
+		transition: opacity 0.2s ease;
+	}
+
+	/* Show highlight when there's actual URL content */
+	.UrlFragments:not(:empty):has(.UrlFragment-LinkWrapper) {
+		opacity: 1;
+	}
+}
