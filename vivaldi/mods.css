@@ -7,9 +7,9 @@
 
 /* Arcify by adding padding to browser */
 #browser {
-	padding-top: 10px !important;
-	padding-right: 10px !important;
-	padding-bottom: 10px !important;
+	padding-top: 8px !important;
+	padding-right: 8px !important;
+	padding-bottom: 8px !important;
 	padding-left: 0 !important;
 }
 
@@ -17,6 +17,9 @@
 #webpage-stack {
 	border-radius: 6px;
 	box-shadow: inset 0 0 12px 0 rgba(0, 0, 0, 0.16);
+	/* Use backdrop-filter to increase saturation of content behind this element */
+	backdrop-filter: saturate(0.7);
+	-webkit-backdrop-filter: saturate(0.7);
 }
 
 .tabbar-wrapper {
@@ -47,7 +50,7 @@
 	top: 0;
 	left: 0;
 	right: 0;
-	height: 10px !important;
+	height: 20px !important;
 	background: transparent !important;
 	border: 0 !important;
 	box-shadow: none !important;
@@ -61,12 +64,14 @@
 	/* position inside of the container gutter*/
 	overflow: visible !important; /* let children escape */
 	position: absolute !important;
-	top: -10px;
 	left: 0;
 	right: 0;
-	height: 10px !important;
+	/* make resize area reasonably big and extend into the border of the browser */
+	top: -10px;
+	height: 20px !important;
 	border: 0 !important;
 
+	background: transparent !important;
 	/* let pointer events pass through (for forward/back/reload buttons) */
 	pointer-events: none !important;
 
@@ -77,7 +82,7 @@
 		margin-top: 30%;
 
 		&:not(:has(.UrlField:focus-within, #urlFieldInput:focus)) {
-			pointer-events: none;
+			pointer-events: none !important;
 		}
 
 		&:has(.UrlField:focus-within, #urlFieldInput:focus) {
@@ -87,22 +92,30 @@
 	}
 }
 
-#browser.win {
-	button.vivaldi {
-		display: none;
+#browser.win .mainbar {
+	.toolbar-mainbar {
+		transform: translateY(-40px);
 	}
 
 	.window-buttongroup {
 		position: absolute;
-		top: 10px;
+		top: 50px;
 		left: clamp(32px, 6vw, 120px);
-		z-index: 9999;
-		pointer-events: auto;
+		min-height: 0 !important;
+		pointer-events: none !important;
 		button {
 			width: 25px !important;
 			height: 25px !important;
 			pointer-events: auto;
 		}
+	}
+
+	.UrlBar-AddressField {
+		margin-top: calc(30% + 40px);
+	}
+
+	button.vivaldi {
+		display: none;
 	}
 }
 
