@@ -7,10 +7,7 @@
 
 /* Arcify by adding padding to browser */
 #browser {
-	padding-top: 8px !important;
-	padding-right: 8px !important;
-	padding-bottom: 8px !important;
-	padding-left: 0 !important;
+	padding: 8px !important;
 }
 
 /* Arcify by adding border radius and uniform inset shadow to main content container */
@@ -30,9 +27,7 @@
 	}
 
 	#tabs-tabbar-container {
-		padding-top: 0 !important;
-		padding-bottom: 0 !important;
-		padding-left: 5px !important;
+		padding: 0 !important;
 		padding-right: 5px !important;
 		background: transparent !important;
 		box-shadow: none !important;
