@@ -106,7 +106,8 @@
 		transform: translate(20px, -20px);
 	}
 }
-.mainbar, #header {
+.mainbar,
+#header {
 	.UrlBar-AddressField {
 		opacity: 0;
 		transition: opacity 120ms ease;
