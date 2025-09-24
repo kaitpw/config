@@ -3,6 +3,7 @@
 2. customize address bar to: flexible space, address bar, flexible space
 3. customize status bar to: status info (only this)
 4. customize the tab bar at the top to: flexible space, back, forward, reload. (the flex space is the crucial part here)
+5. make the command chain "Ctrl + 1" toggle both the address bar and the tab bar
 */
 
 /* Arcify by adding padding to browser */
@@ -73,7 +74,39 @@
 
 	/* let pointer events pass through (for forward/back/reload buttons) */
 	pointer-events: none !important;
+}
 
+#browser.win .mainbar {
+	.window-buttongroup {
+		position: absolute;
+		top: 50px;
+		left: clamp(32px, 6vw, 120px);
+		min-height: 0 !important;
+		pointer-events: none !important;
+		button {
+			width: 25px !important;
+			height: 25px !important;
+			pointer-events: auto;
+		}
+	}
+
+	button.vivaldi {
+		display: none;
+	}
+}
+
+.mainbar {
+	.toolbar-mainbar {
+		transform: translateY(-40px);
+	}
+}
+#header {
+	.toolbar-mainbar {
+		/*super jank but whatever*/
+		transform: translate(20px, -20px);
+	}
+}
+.mainbar, #header {
 	.UrlBar-AddressField {
 		opacity: 0;
 		transition: opacity 120ms ease;
@@ -94,29 +127,12 @@
 			box-shadow: 0 0 40px 10px var(--colorHighlightBg, #fff4) !important;
 		}
 	}
-
-	.toolbar-mainbar {
-		transform: translateY(-40px);
-	}
 }
 
-#browser.win .mainbar {
-	.window-buttongroup {
-		position: absolute;
-		top: 50px;
-		left: clamp(32px, 6vw, 120px);
-		min-height: 0 !important;
-		pointer-events: none !important;
-		button {
-			width: 25px !important;
-			height: 25px !important;
-			pointer-events: auto;
-		}
-	}
-
-	button.vivaldi {
-		display: none;
-	}
+/* round the corners of the panel bar */
+#panels-container {
+	border-top-left-radius: 6px;
+	border-bottom-left-radius: 6px;
 }
 
 #footer {
