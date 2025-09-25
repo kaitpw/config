@@ -8,7 +8,7 @@
 
 /* Arcify by adding padding to browser */
 #browser {
-	padding: 8px !important;
+	padding: 9px !important;
 }
 
 /* Arcify by adding border radius and uniform inset shadow to main content container */
@@ -114,6 +114,7 @@
 		max-width: 500px;
 		margin-top: calc(30% + 40px);
 		transform: scale(1.25) !important;
+		padding-left: 9px !important;
 
 		&:not(:has(.UrlField:focus-within, #urlFieldInput:focus)) {
 			pointer-events: none !important;
@@ -126,6 +127,9 @@
 
 		.OmniDropdown {
 			box-shadow: 0 0 40px 10px var(--colorHighlightBg, #fff4) !important;
+			.OmniLinkItem {
+				padding: 9px !important;
+			}
 		}
 	}
 }
