@@ -81,14 +81,26 @@ q:: {
 e:: Send "!{Right}"
 ;  --- MRU/Buffer Switching --- ;
 Tab:: {
-    Send "{RCtrl Down}{Tab}"
-    KeyWait "Capslock"
-    Send "{RCtrl up}"
+    if WinActive("ahk_exe Revit.exe") {
+        Send "{Ctrl Down}``"
+        KeyWait "Capslock"
+        Send "{Ctrl up}"
+    } else {
+        Send "{RCtrl Down}{Tab}"
+        KeyWait "Capslock"
+        Send "{RCtrl up}"
+    }
 }
 +Tab:: {
-    Send "{Shift}{RCtrl Down}{Tab}"
-    KeyWait "Capslock"
-    Send "{RCtrl up}"
+    if WinActive("ahk_exe Revit.exe") {
+        Send "{Shift}{Ctrl Down}``"
+        KeyWait "Capslock"
+        Send "{Ctrl up}"
+    } else {
+        Send "{Shift}{RCtrl Down}{Tab}"
+        KeyWait "Capslock"
+        Send "{RCtrl up}"
+    }
 }
 #Hotif
 
