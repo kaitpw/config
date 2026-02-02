@@ -83,11 +83,22 @@
 		left: clamp(32px, 6vw, 120px);
 		min-height: 0 !important;
 		pointer-events: none !important;
+		background: transparent !important;
+		background-color: transparent !important;
+		box-shadow: none !important;
+		border: 0 !important;
+
 		button {
 			width: 25px !important;
 			height: 25px !important;
 			pointer-events: auto;
 		}
+	}
+
+	/* Target the specific on-mainbar variant */
+	.window-buttongroup.on-mainbar {
+		background: transparent !important;
+		background-color: transparent !important;
 	}
 
 	button.vivaldi {
