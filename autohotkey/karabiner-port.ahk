@@ -106,6 +106,38 @@ Tab:: {
 
 ; ----- Shifty Spacebar -----
 ;  * allows modifier passthrough, $ prevents triggering itself via Send commands inside it
+ShiftySpaceWarp(delayMs := 120) {
+    start := A_TickCount
+    sawDown := false
+    loop {
+        down := GetKeyState("Space", "P") || GetKeyState("vk20", "P")
+        if down
+            sawDown := true
+        elapsed := A_TickCount - start
+        if !down && sawDown && elapsed < delayMs {
+            Send "{Blind}{Space}"
+            return
+        }
+        if elapsed >= delayMs {
+            if !sawDown && !down {
+                Send "{Blind}{Space}"
+                return
+            }
+            Send "{Blind}{Shift Down}"
+            while GetKeyState("Space", "P") || GetKeyState("vk20", "P")
+                Sleep 1
+            Send "{Blind}{Shift Up}"
+            return
+        }
+        Sleep 1
+    }
+}
+
+#HotIf WinActive("ahk_exe warp.exe")
+*$Space:: ShiftySpaceWarp()
+#HotIf
+
+#HotIf !WinActive("ahk_exe warp.exe")
 *$Space:: {
     local DELAY_MS := 120
     local space_released_or_timedout := KeyWait("Space", "T" . DELAY_MS / 1000)
@@ -113,9 +145,10 @@ Tab:: {
     if space_released_or_timedout {
         SendText " "
     } else {
-        Send "{Shift Down}" ; --- Space being HELD ---
+        Send "{Shift Down}"
         KeyWait "Space"
-        Send "{Shift Up}" ; --- Space was RELEASED ---
+        Send "{Shift Up}"
     }
     return
 }
+#HotIf
